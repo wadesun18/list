@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from 'react';
+import React, { memo, useCallback } from 'react';
 
 import styled from 'styled-components/native';
 
@@ -42,13 +42,16 @@ const ListUpdateInput = () => {
     }
 
     updateItem();
-  }, [inputTextValue]);
+  }, [addItem, inputActionType, inputTextValue, setInputTextValue, updateItem]);
 
   const ListUpdateButton = memo(() => (
     <ListUpdateButtonWrapper onPress={handleAddItem}>
       <ActionText>{inputActionType}</ActionText>
     </ListUpdateButtonWrapper>
   ));
+
+  ListUpdateButton.displayName = 'ListUpdateButton';
+
   return (
     <ListUpdateInputView>
       <Card

@@ -66,7 +66,7 @@ export function MyListProvider({ children }: { children: React.ReactNode }) {
       if (!newItem.trim()) return;
       setList((prevList) => [...prevList, newItem.trim()]);
     },
-    [setList, inputTextValue],
+    [setList],
   );
 
   const updateItemActionOnPress = useCallback(
@@ -90,7 +90,7 @@ export function MyListProvider({ children }: { children: React.ReactNode }) {
     setInputTextValue('');
     setEditItemIndex(undefined);
     setInputActionType('ADD');
-  }, [inputTextValue, setList, setInputTextValue]);
+  }, [inputTextValue, setList, setInputTextValue, editItemIndex]);
 
   const state = useMemo(
     () => ({

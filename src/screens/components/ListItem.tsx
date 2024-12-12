@@ -58,4 +58,6 @@ const ListItem = memo(({ item, index }: { item: ToDoItem; index: number }) => {
   );
 });
 
+ListItem.displayName = 'ListItem';
+
 export default ListItem;
