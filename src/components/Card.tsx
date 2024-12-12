@@ -47,4 +47,6 @@ const Card = memo(({ rightComponent, leftComponent, height }: CardProps) => {
   );
 });
 
+Card.displayName = 'Card';
+
 export default Card;
