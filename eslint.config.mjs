@@ -4,8 +4,6 @@ import pluginReactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-// Import react-hooks plugin
-
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   {
