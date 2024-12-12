@@ -1,5 +1,4 @@
-import React from 'react';
-import {
+import React, {
   Dispatch,
   SetStateAction,
   createContext,
@@ -11,56 +10,117 @@ import {
 
 export type ToDoItem = string;
 export type List = ToDoItem[];
+export type ActionType = 'ADD' | 'UPDATE';
 
 export type ListContent = {
-  list: List | undefined;
-  setList: Dispatch<SetStateAction<List | undefined>>;
+  list: List;
+  setList: Dispatch<SetStateAction<List>>;
   deleteItem: (index: number) => void;
+  addItem: (newItem: ToDoItem) => void;
+  updateItem: () => void;
+  inputTextValue: string;
+  setInputTextValue: Dispatch<SetStateAction<string>>;
+  updateItemActionOnPress: (index: number) => void;
+  inputActionType: ActionType;
+  setInputActionType: Dispatch<SetStateAction<ActionType>>;
+  editItemIndex: number | undefined;
+  setEditItemIndex: Dispatch<SetStateAction<number | undefined>>;
 };
 
 export const MyListContext = createContext<ListContent>({
-  list: undefined,
+  list: [],
   setList: () => {},
   deleteItem: () => {},
+  addItem: () => {},
+  inputTextValue: '',
+  setInputTextValue: () => {},
+  updateItemActionOnPress: () => {},
+  inputActionType: 'ADD',
+  setInputActionType: () => {},
+  updateItem: () => {},
+  editItemIndex: undefined,
+  setEditItemIndex: () => {},
 });
 
 const MOCK_LIST: ToDoItem[] = [
   'First Item',
   'Second Item',
   'Third Item',
-  'First Item',
-  'Second Item',
-  'Third Item',
-  'First Item',
-  'Second Item',
-  'Third Item',
-  'First Item',
-  'Second Item',
-  'Third Item',
+  'Fourth Item',
 ];
 
 export function MyListProvider({ children }: { children: React.ReactNode }) {
-  const [list, setList] = useState<List | undefined>(MOCK_LIST);
-
-  const deleteItem = useCallback(
-    (index: number) => {
-      if (list) {
-        setList((prevList) => {
-          if (!prevList) return prevList;
-          return prevList.filter((_, i) => i !== index);
-        });
-      }
-    },
-    [setList],
+  const [inputActionType, setInputActionType] = useState<ActionType>('ADD');
+  const [inputTextValue, setInputTextValue] = useState('');
+  const [editItemIndex, setEditItemIndex] = useState<number | undefined>(
+    undefined,
   );
+  const [list, setList] = useState<List>(MOCK_LIST);
+
+  const deleteItem = useCallback((index: number) => {
+    setList((prevList) => prevList.filter((_, i) => i !== index));
+  }, []);
+
+  const addItem = useCallback(
+    (newItem: ToDoItem) => {
+      if (!newItem.trim()) return;
+      setList((prevList) => [...prevList, newItem.trim()]);
+    },
+    [setList, inputTextValue],
+  );
+
+  const updateItemActionOnPress = useCallback(
+    (index: number) => {
+      setInputActionType('UPDATE');
+      setEditItemIndex(index);
+      setInputTextValue(list[index]);
+    },
+    [list],
+  );
+
+  const updateItem = useCallback(() => {
+    if (!inputTextValue) return;
+
+    setList((prevList) => {
+      return prevList.map((item, i) =>
+        i === editItemIndex ? inputTextValue : item,
+      );
+    });
+
+    setInputTextValue('');
+    setEditItemIndex(undefined);
+    setInputActionType('ADD');
+  }, [inputTextValue, setList, setInputTextValue]);
 
   const state = useMemo(
     () => ({
       list,
       setList,
+      addItem,
       deleteItem,
+      inputTextValue,
+      setInputTextValue,
+      updateItemActionOnPress,
+      inputActionType,
+      setInputActionType,
+      updateItem,
+      editItemIndex,
+      setEditItemIndex,
     }),
-    [list, setList, deleteItem],
+    [
+      list,
+      setList,
+      addItem,
+      deleteItem,
+      inputTextValue,
+      setInputTextValue,
+      inputActionType,
+      setInputActionType,
+      updateItemActionOnPress,
+      updateItem,
+      editItemIndex,
+      setEditItemIndex,
+    ],
   );
 
   return (
