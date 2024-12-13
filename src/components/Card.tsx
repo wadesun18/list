@@ -38,7 +38,7 @@ type CardProps = {
 /**  Card component takes in a left and right component */
 const Card = memo(({ rightComponent, leftComponent, height }: CardProps) => {
   return (
-    <CardContainer height={height}>
+    <CardContainer height={height} testID="CardContainer">
       <InnerCard>
         {leftComponent}
         {rightComponent}
