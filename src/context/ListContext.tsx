@@ -57,9 +57,14 @@ export function MyListProvider({ children }: { children: React.ReactNode }) {
   );
   const [list, setList] = useState<List>(MOCK_LIST);
 
-  const deleteItem = useCallback((index: number) => {
-    setList((prevList) => prevList.filter((_, i) => i !== index));
-  }, []);
+  const deleteItem = useCallback(
+    (index: number) => {
+      setInputActionType('ADD');
+      setInputTextValue('');
+      setList((prevList) => prevList.filter((_, i) => i !== index));
+    },
+    [setList],
+  );
 
   const addItem = useCallback(
     (newItem: ToDoItem) => {
@@ -90,7 +95,7 @@ export function MyListProvider({ children }: { children: React.ReactNode }) {
     setInputTextValue('');
     setEditItemIndex(undefined);
     setInputActionType('ADD');
-  }, [inputTextValue, setList, setInputTextValue, editItemIndex]);
+  }, [editItemIndex, inputTextValue]);
 
   const state = useMemo(
     () => ({

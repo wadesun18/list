@@ -9,19 +9,17 @@ import { useListContext } from '../../context/ListContext';
 
 const ActionText = styled.Text`
   color: ${GRAY_WHITE};
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 400;
 `;
 
 const ListUpdateButtonWrapper = styled.TouchableOpacity`
   background-color: ${DARK_BLUE};
   border-radius: 10px;
-  padding: 5px;
+  padding: 10px;
 `;
 
 const ListUpdateInputView = styled.View`
-  border-width: 1px;
-  margin-top: 20px;
   margin-horizontal: 5%;
 `;
 
@@ -55,11 +53,11 @@ const ListUpdateInput = () => {
   return (
     <ListUpdateInputView>
       <Card
-        height={50}
+        height={60}
         leftComponent={
           <TextInput
             placeholder="Enter here"
-            width="80%"
+            width="70%"
             value={inputTextValue}
             onChangeText={setInputTextValue}
           />

@@ -25,9 +25,9 @@ const ContainerWrapper = styled.SafeAreaView`
 const TitleWrapper = styled.View`
   flex-direction: row;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: center;
   width: 100%;
-  margin-top: 10%;
+  margin-top: 15%;
   margin-left: 10%;
 `;
 

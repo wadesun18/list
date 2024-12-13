@@ -4,7 +4,7 @@ import { TextInputProps } from 'react-native';
 
 import styled from 'styled-components/native';
 
-import { DARK_BLUE } from '../constants';
+import { BLACK, DARK_BLUE } from '../constants';
 
 type CustomTextInputProps = TextInputProps & {
   width?: string;
@@ -12,14 +12,14 @@ type CustomTextInputProps = TextInputProps & {
 
 const StyledTextInput = styled.TextInput<{ width: string }>`
   width: ${(props) => props.width};
-  height: 22px;
+  height: 50px;
   border-radius: 6px;
   border-bottom-color: ${DARK_BLUE};
-  border-bottom-width: 1px;
   shadow-color: #000;
   shadow-offset: 0px 5px;
   shadow-opacity: 0.3;
   shadow-radius: 10px;
+  color: ${BLACK};
 `;
 
 const CustomTextInput: React.FC<CustomTextInputProps> = ({
