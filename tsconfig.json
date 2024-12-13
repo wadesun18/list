@@ -4,6 +4,6 @@
     "strict": true,
     "jsx": "react-native",
     "typeRoots": ["node_modules/@types"],
-    "types": ["react", "react-native"]
+    "types": ["react", "react-native", "jest"]
   }
 }

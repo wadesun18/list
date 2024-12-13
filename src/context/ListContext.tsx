@@ -14,64 +14,49 @@ export type ActionType = 'ADD' | 'UPDATE';
 
 export type ListContent = {
   list: List;
-  setList: Dispatch<SetStateAction<List>>;
-  deleteItem: (index: number) => void;
   addItem: (newItem: ToDoItem) => void;
+  deleteItem: (index: number) => void;
   updateItem: () => void;
   inputTextValue: string;
   setInputTextValue: Dispatch<SetStateAction<string>>;
   updateItemActionOnPress: (index: number) => void;
   inputActionType: ActionType;
   setInputActionType: Dispatch<SetStateAction<ActionType>>;
-  editItemIndex: number | undefined;
-  setEditItemIndex: Dispatch<SetStateAction<number | undefined>>;
+  editItemIndex: number | null;
+  setEditItemIndex: Dispatch<SetStateAction<number | null>>;
 };
 
-export const MyListContext = createContext<ListContent>({
-  list: [],
-  setList: () => {},
-  deleteItem: () => {},
-  addItem: () => {},
-  inputTextValue: '',
-  setInputTextValue: () => {},
-  updateItemActionOnPress: () => {},
-  inputActionType: 'ADD',
-  setInputActionType: () => {},
-  updateItem: () => {},
-  editItemIndex: undefined,
-  setEditItemIndex: () => {},
-});
+export const MyListContext = createContext<ListContent | null>(null);
 
-const MOCK_LIST: ToDoItem[] = [
-  'First Item',
-  'Second Item',
-  'Third Item',
-  'Fourth Item',
-];
-
-export function MyListProvider({ children }: { children: React.ReactNode }) {
-  const [inputActionType, setInputActionType] = useState<ActionType>('ADD');
+export function MyListProvider({
+  children,
+  initialList = [],
+}: {
+  children: React.ReactNode;
+  initialList?: List;
+}) {
+  const [list, setList] = useState<List>(initialList);
   const [inputTextValue, setInputTextValue] = useState('');
-  const [editItemIndex, setEditItemIndex] = useState<number | undefined>(
-    undefined,
-  );
-  const [list, setList] = useState<List>(MOCK_LIST);
+  const [inputActionType, setInputActionType] = useState<ActionType>('ADD');
+  const [editItemIndex, setEditItemIndex] = useState<number | null>(null);
+
+  const resetInput = useCallback(() => {
+    setInputTextValue('');
+    setEditItemIndex(null);
+    setInputActionType('ADD');
+  }, []);
+
+  const addItem = useCallback((newItem: ToDoItem) => {
+    if (!newItem.trim()) return;
+    setList((prevList) => [...prevList, newItem.trim()]);
+  }, []);
 
   const deleteItem = useCallback(
     (index: number) => {
-      setInputActionType('ADD');
-      setInputTextValue('');
       setList((prevList) => prevList.filter((_, i) => i !== index));
+      resetInput();
     },
-    [setList],
-  );
-
-  const addItem = useCallback(
-    (newItem: ToDoItem) => {
-      if (!newItem.trim()) return;
-      setList((prevList) => [...prevList, newItem.trim()]);
-    },
-    [setList],
+    [resetInput],
   );
 
   const updateItemActionOnPress = useCallback(
@@ -84,7 +69,7 @@ export function MyListProvider({ children }: { children: React.ReactNode }) {
   );
 
   const updateItem = useCallback(() => {
-    if (!inputTextValue) return;
+    if (!inputTextValue.trim() || editItemIndex === null) return;
 
     setList((prevList) => {
       return prevList.map((item, i) =>
@@ -92,10 +77,8 @@ export function MyListProvider({ children }: { children: React.ReactNode }) {
       );
     });
 
-    setInputTextValue('');
-    setEditItemIndex(undefined);
-    setInputActionType('ADD');
-  }, [editItemIndex, inputTextValue]);
+    resetInput();
+  }, [editItemIndex, inputTextValue, resetInput]);
 
   const state = useMemo(
     () => ({
@@ -114,17 +97,13 @@ export function MyListProvider({ children }: { children: React.ReactNode }) {
     }),
     [
       list,
-      setList,
       addItem,
       deleteItem,
       inputTextValue,
-      setInputTextValue,
-      inputActionType,
-      setInputActionType,
       updateItemActionOnPress,
+      inputActionType,
       updateItem,
       editItemIndex,
-      setEditItemIndex,
     ],
   );
 
@@ -133,4 +112,10 @@ export function MyListProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-export const useListContext = () => useContext(MyListContext);
+export const useListContext = () => {
+  const context = useContext(MyListContext);
+  if (!context) {
+    throw new Error('useListContext must be used within a MyListProvider');
+  }
+  return context;
+};
