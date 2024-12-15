@@ -55,7 +55,7 @@ export function MyListProvider({ children }: { children: React.ReactNode }) {
     loadList();
   }, []);
 
-  // Save the list to AsyncStorage whenever it changes
+  // Save the list to AsyncStorage whenever it changes so the list items can persist
   useEffect(() => {
     async function saveList() {
       if (list && list.length !== 0) {
