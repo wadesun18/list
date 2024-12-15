@@ -77,8 +77,15 @@ export function MyListProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const addItem = useCallback((newItem: ToDoItem) => {
-    if (!newItem.trim()) return;
-    setList((prevList) => [...prevList, newItem.trim()]);
+    const newItemTrimmed = newItem.trim();
+
+    if (!newItemTrimmed) {
+      alert(
+        'The input field is blank, please enter at least 1 character to add to the list',
+      );
+      return;
+    }
+    setList((prevList) => [...prevList, newItemTrimmed]);
   }, []);
 
   const deleteItem = useCallback(

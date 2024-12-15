@@ -36,6 +36,7 @@ const ListItem = memo(({ item, index }: { item: ToDoItem; index: number }) => {
     <CardWrapper onPress={handleEdit}>
       <Card
         height={50}
+        // list item text
         leftComponent={
           <LeftCardWrapper>
             <Octicons name="dot-fill" size={ICON_SIZE} color={DARK_BLUE} />
@@ -44,8 +45,10 @@ const ListItem = memo(({ item, index }: { item: ToDoItem; index: number }) => {
             </ItemText>
           </LeftCardWrapper>
         }
+        // delete button
         rightComponent={
           <TouchableOpacity
+            // increase pressable area
             hitSlop={HIT_SLOP}
             onPress={handleDelete}
             accessibilityLabel="Delete item"

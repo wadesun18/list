@@ -3,13 +3,13 @@ import React from 'react';
 import { fireEvent, render } from '@testing-library/react-native';
 
 import { useListContext } from '../../context/ListContext';
-import ListUpdateInput from './ListUpdateInput';
+import ListInput from './ListInput';
 
 jest.mock('../../context/ListContext', () => ({
   useListContext: jest.fn(),
 }));
 
-describe('ListUpdateInput', () => {
+describe('ListInput', () => {
   const mockAddItem = jest.fn();
   const mockUpdateItem = jest.fn();
   const mockSetInputTextValue = jest.fn();
@@ -26,14 +26,14 @@ describe('ListUpdateInput', () => {
   });
 
   it('renders correctly with initial state', () => {
-    const { getByPlaceholderText, getByText } = render(<ListUpdateInput />);
+    const { getByPlaceholderText, getByText } = render(<ListInput />);
 
     expect(getByPlaceholderText('Enter here')).toBeTruthy();
     expect(getByText('ADD')).toBeTruthy();
   });
 
   it('calls addItem and clears input when inputActionType is ADD', () => {
-    const { getByText } = render(<ListUpdateInput />);
+    const { getByText } = render(<ListInput />);
 
     const addButton = getByText('ADD');
     fireEvent.press(addButton);
@@ -47,7 +47,7 @@ describe('ListUpdateInput', () => {
       inputActionType: 'UPDATE',
       updateItem: mockUpdateItem,
     });
-    const { getByText } = render(<ListUpdateInput />);
+    const { getByText } = render(<ListInput />);
 
     const updateButton = getByText('UPDATE');
     fireEvent.press(updateButton);
@@ -63,7 +63,7 @@ describe('ListUpdateInput', () => {
       setInputTextValue: mockSetInputTextValue,
     });
 
-    const { getByPlaceholderText } = render(<ListUpdateInput />);
+    const { getByPlaceholderText } = render(<ListInput />);
 
     const textInput = getByPlaceholderText('Enter here');
     fireEvent.changeText(textInput, 'New Input');

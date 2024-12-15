@@ -30,7 +30,7 @@ describe('List Component', () => {
     expect(getAllByText(/Item/).length).toBe(mockList.length);
   });
 
-  it('renders the ListUpdateInput component', () => {
+  it('renders the ListInput component', () => {
     const { getByPlaceholderText } = render(<List />);
 
     expect(getByPlaceholderText('Enter here')).toBeTruthy();
