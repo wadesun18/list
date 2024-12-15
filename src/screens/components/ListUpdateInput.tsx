@@ -3,9 +3,9 @@ import React, { memo, useCallback } from 'react';
 import styled from 'styled-components/native';
 
 import Card from '../../components/Card';
-import TextInput from '../../components/TextInput';
+import CustomTextInput from '../../components/CustomTextInput';
 import { DARK_BLUE, GRAY_WHITE } from '../../constants';
-import { useListContext } from '../../context/ListContext';
+import { ActionType, useListContext } from '../../context/ListContext';
 
 const ActionText = styled.Text`
   color: ${GRAY_WHITE};
@@ -22,6 +22,20 @@ const ListUpdateButtonWrapper = styled.TouchableOpacity`
 const ListUpdateInputView = styled.View`
   margin-horizontal: 5%;
 `;
+
+type ListUpdateButtonProps = {
+  onPress: () => void;
+  inputActionType: ActionType;
+};
+const ListUpdateButton = memo(
+  ({ onPress, inputActionType }: ListUpdateButtonProps) => (
+    <ListUpdateButtonWrapper onPress={onPress}>
+      <ActionText>{inputActionType}</ActionText>
+    </ListUpdateButtonWrapper>
+  ),
+);
+
+ListUpdateButton.displayName = 'ListUpdateButton';
 
 const ListUpdateInput = () => {
   const {
@@ -42,27 +56,24 @@ const ListUpdateInput = () => {
     updateItem();
   }, [addItem, inputActionType, inputTextValue, setInputTextValue, updateItem]);
 
-  const ListUpdateButton = memo(() => (
-    <ListUpdateButtonWrapper onPress={handleAddItem}>
-      <ActionText>{inputActionType}</ActionText>
-    </ListUpdateButtonWrapper>
-  ));
-
-  ListUpdateButton.displayName = 'ListUpdateButton';
-
   return (
     <ListUpdateInputView>
       <Card
         height={60}
         leftComponent={
-          <TextInput
+          <CustomTextInput
             placeholder="Enter here"
             width="70%"
             value={inputTextValue}
             onChangeText={setInputTextValue}
           />
         }
-        rightComponent={<ListUpdateButton />}
+        rightComponent={
+          <ListUpdateButton
+            onPress={handleAddItem}
+            inputActionType={inputActionType}
+          />
+        }
       />
     </ListUpdateInputView>
   );
