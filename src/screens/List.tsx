@@ -12,8 +12,8 @@ import styled from 'styled-components/native';
 
 import { DARK_BLUE, GRAY } from '../constants';
 import { ToDoItem, useListContext } from '../context/ListContext';
+import ListInput from './components/ListInput';
 import ListItem from './components/ListItem';
-import ListUpdateInput from './components/ListUpdateInput';
 
 const ContainerWrapper = styled.SafeAreaView`
   flex: 1;
@@ -62,7 +62,7 @@ export default function List() {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-          <ListUpdateInput />
+          <ListInput />
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </ContainerWrapper>

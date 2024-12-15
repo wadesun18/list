@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 module.exports = {
   semi: true,
   singleQuote: true,
@@ -6,10 +7,10 @@ module.exports = {
   printWidth: 80,
   plugins: ['@trivago/prettier-plugin-sort-imports'],
   importOrder: [
-    '^react$', 
-    '^react-(.*)$', 
+    '^react$',
+    '^react-(.*)$',
     '<THIRD_PARTY_MODULES>',
-    '^@/(.*)$', 
+    '^@/(.*)$',
     '^[./]',
   ],
   importOrderSeparation: true,

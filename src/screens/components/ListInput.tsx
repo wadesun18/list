@@ -13,31 +13,31 @@ const ActionText = styled.Text`
   font-weight: 400;
 `;
 
-const ListUpdateButtonWrapper = styled.TouchableOpacity`
+const ListActionButtonWrapper = styled.TouchableOpacity`
   background-color: ${DARK_BLUE};
   border-radius: 10px;
   padding: 10px;
 `;
 
-const ListUpdateInputView = styled.View`
+const ListInputView = styled.View`
   margin-horizontal: 5%;
 `;
 
-type ListUpdateButtonProps = {
+type ListActionButtonProps = {
   onPress: () => void;
   inputActionType: ActionType;
 };
-const ListUpdateButton = memo(
-  ({ onPress, inputActionType }: ListUpdateButtonProps) => (
-    <ListUpdateButtonWrapper onPress={onPress}>
+const ListActionButton = memo(
+  ({ onPress, inputActionType }: ListActionButtonProps) => (
+    <ListActionButtonWrapper onPress={onPress}>
       <ActionText>{inputActionType}</ActionText>
-    </ListUpdateButtonWrapper>
+    </ListActionButtonWrapper>
   ),
 );
 
-ListUpdateButton.displayName = 'ListUpdateButton';
+ListActionButton.displayName = 'ListActionButton';
 
-const ListUpdateInput = () => {
+const ListInput = () => {
   const {
     addItem,
     inputActionType,
@@ -46,18 +46,20 @@ const ListUpdateInput = () => {
     setInputTextValue,
   } = useListContext();
 
-  const handleAddItem = useCallback(() => {
+  // Handle either add or update an item
+  const handleOnPress = useCallback(() => {
     if (inputActionType === 'ADD') {
       addItem(inputTextValue);
       setInputTextValue('');
       return;
     }
 
+    // when inputActionType is UPDATE
     updateItem();
   }, [addItem, inputActionType, inputTextValue, setInputTextValue, updateItem]);
 
   return (
-    <ListUpdateInputView>
+    <ListInputView>
       <Card
         height={60}
         leftComponent={
@@ -69,14 +71,14 @@ const ListUpdateInput = () => {
           />
         }
         rightComponent={
-          <ListUpdateButton
-            onPress={handleAddItem}
+          <ListActionButton
+            onPress={handleOnPress}
             inputActionType={inputActionType}
           />
         }
       />
-    </ListUpdateInputView>
+    </ListInputView>
   );
 };
 
-export default ListUpdateInput;
+export default ListInput;
