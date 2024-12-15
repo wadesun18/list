@@ -8,7 +8,7 @@ A todo list where users can add, update, and delete items on the list. This is a
 - run `yarn`
 - run `yarn start` to start the project and scan the QR code with your device. Make sure Expo Go is installed on the phone
 
-# Test
+# Run Test/Prettier/Eslint
 
 - `yarn test` to run unit tests
 - `yarn lint` to run prettier
@@ -17,4 +17,15 @@ A todo list where users can add, update, and delete items on the list. This is a
 # Demo
 
 iOS
+
 [![Demo](./iOS%20demo.gif)](./iOS%20demo.gif)
+
+Android
+
+[![Demo](./Android%20demo.gif)](./Android%20demo.gif)
+
+# Road Map
+
+- After update or add, scroll the list to the newest operated item
+- Save the list to BE
+- Add error handling - display to the user if anything goes wrong
