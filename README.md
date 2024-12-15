@@ -26,6 +26,5 @@ Android
 
 # Road Map
 
-- After update or add, scroll the list to the newest operated item
 - Save the list to BE
 - Add error handling - display to the user if anything goes wrong
