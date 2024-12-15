@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import {
+  FlatList,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -37,12 +38,18 @@ const ToDoText = styled.Text`
   font-weight: 600;
 `;
 
-const ListView = styled.FlatList`
-  width: 100%;
-`;
-
 export default function List() {
   const { list } = useListContext();
+  const flatListRef = useRef<FlatList>(null); // Ref for FlatList
+  const previousListLength = useRef(list.length); // Track the previous list length
+
+  // Scroll to the end when a new item is added
+  useEffect(() => {
+    if (list.length > previousListLength.current) {
+      flatListRef.current?.scrollToEnd({ animated: true });
+    }
+    previousListLength.current = list.length;
+  }, [list]);
 
   return (
     <ContainerWrapper>
@@ -50,7 +57,8 @@ export default function List() {
         <Octicons name="checklist" size={24} color="black" />
         <ToDoText>TODO LIST</ToDoText>
       </TitleWrapper>
-      <ListView
+      <FlatList
+        ref={flatListRef}
         contentContainerStyle={{ paddingBottom: 100 }}
         data={list}
         renderItem={({ item, index }) => (
