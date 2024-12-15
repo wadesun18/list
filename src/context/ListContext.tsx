@@ -4,9 +4,12 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export type ToDoItem = string;
 export type List = ToDoItem[];
@@ -28,17 +31,44 @@ export type ListContent = {
 
 export const MyListContext = createContext<ListContent | null>(null);
 
-export function MyListProvider({
-  children,
-  initialList = [],
-}: {
-  children: React.ReactNode;
-  initialList?: List;
-}) {
-  const [list, setList] = useState<List>(initialList);
+const STORAGE_KEY = 'MY_LIST';
+
+export function MyListProvider({ children }: { children: React.ReactNode }) {
+  const [list, setList] = useState<List>([]);
   const [inputTextValue, setInputTextValue] = useState('');
   const [inputActionType, setInputActionType] = useState<ActionType>('ADD');
   const [editItemIndex, setEditItemIndex] = useState<number | null>(null);
+
+  // Load the list from AsyncStorage when the component mounts
+  useEffect(() => {
+    async function loadList() {
+      try {
+        const storedList = await AsyncStorage.getItem(STORAGE_KEY);
+        if (storedList) {
+          setList(JSON.parse(storedList));
+        }
+      } catch (e) {
+        console.error('Failed to load the list from AsyncStorage', e);
+      }
+    }
+
+    loadList();
+  }, []);
+
+  // Save the list to AsyncStorage whenever it changes
+  useEffect(() => {
+    async function saveList() {
+      if (list && list.length !== 0) {
+        try {
+          await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+        } catch (e) {
+          console.error('Failed to save the list to AsyncStorage', e);
+        }
+      }
+    }
+
+    saveList();
+  }, [list]);
 
   const resetInput = useCallback(() => {
     setInputTextValue('');

@@ -23,7 +23,7 @@ const StyledTextInput = styled.TextInput<{ width: string }>`
 `;
 
 const CustomTextInput: React.FC<CustomTextInputProps> = ({
-  width = '100%', // Default width is 80%
+  width = '100%',
   ...rest
 }) => {
   return <StyledTextInput width={width} {...rest} />;
