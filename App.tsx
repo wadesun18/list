@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { ActivityIndicator, Text } from 'react-native';
+import { ActivityIndicator, Alert, Text } from 'react-native';
 
 import * as LocalAuthentication from 'expo-local-authentication';
 import styled from 'styled-components/native';
@@ -20,9 +20,43 @@ export default function App() {
 
   useEffect(() => {
     async function authenticate() {
-      const result = await LocalAuthentication.authenticateAsync();
-      setIsAuthenticated(result.success);
-      setIsCheckingAuth(false);
+      try {
+        // Check if the device supports biometric authentication
+        const hasHardware = await LocalAuthentication.hasHardwareAsync();
+        if (!hasHardware) {
+          Alert.alert(
+            'Unsupported Device',
+            'Your device does not support biometric authentication.',
+          );
+          setIsCheckingAuth(false);
+          return;
+        }
+
+        // Check if Face ID or biometrics are enrolled
+        const isBiometricAvailable =
+          await LocalAuthentication.isEnrolledAsync();
+        if (!isBiometricAvailable) {
+          Alert.alert(
+            'Biometric Not Set Up',
+            'Please set up Face ID or a biometric method in your device settings.',
+          );
+          setIsCheckingAuth(false);
+          return;
+        }
+
+        // Prompt biometric authentication
+        const result = await LocalAuthentication.authenticateAsync({
+          promptMessage: 'Unlock App with biometirc method or passcode',
+          cancelLabel: 'Cancel',
+        });
+
+        setIsAuthenticated(result.success);
+      } catch (error) {
+        console.error('Authentication error:', error);
+        Alert.alert('Error', 'An error occurred during authentication.');
+      } finally {
+        setIsCheckingAuth(false);
+      }
     }
 
     authenticate();
@@ -42,10 +76,7 @@ export default function App() {
         <List />
       ) : (
         <ContainerWrapper>
-          <Text>
-            Access Denied: Please go to settings and set up your device
-            authentication
-          </Text>
+          <Text>Access Denied</Text>
         </ContainerWrapper>
       )}
     </MyListProvider>
