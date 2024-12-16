@@ -76,10 +76,7 @@ export default function App() {
         <List />
       ) : (
         <ContainerWrapper>
-          <Text>
-            Access Denied: Please go to settings and set up your device
-            authentication
-          </Text>
+          <Text>Access Denied</Text>
         </ContainerWrapper>
       )}
     </MyListProvider>
